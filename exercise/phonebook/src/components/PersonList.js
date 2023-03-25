@@ -1,12 +1,22 @@
 import React from "react";
+import personsService from "../services/persons";
 
-const PersonList = props => {
+const PersonList = ({ filteredPersons, persons, setPersons }) => {
+  const handleDelete = async id => {
+    const person = await personsService.getById(id);
+    const confirmation = window.confirm(`Delete ${person.name}`);
+    if (confirmation) {
+      personsService.deleteById(id);
+    }
+  };
+
   return (
     <>
-      {props.filteredPersons.map(person => (
-        <div key={person.id}>
-          <p>Name: {person.name}</p>
-          <p>Phone: {person.number}</p>
+      {filteredPersons.map(({ id, name, number }) => (
+        <div key={id}>
+          <p>Name: {name}</p>
+          <p>Phone: {number}</p>
+          <button onClick={() => handleDelete(id)}>Delete</button>
         </div>
       ))}
     </>

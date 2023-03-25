@@ -1,23 +1,25 @@
 import { React, useState } from "react";
+import personsService from "../services/persons";
 
-const PersonForm = props => {
+const PersonForm = ({ persons, setPersons }) => {
   const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (props.persons.find(x => x.name === newName)) {
+
+    if (persons.find(x => x.name === newName)) {
       alert(
         `The name ${newName} is already in the application please use another name`
       );
       return;
     }
-    const temp = [...props.persons];
-    const x = { name: newName, number: newPhone };
-    temp.push(x);
-    props.setPersons(temp);
-    setNewName("");
-    setNewPhone("");
+    const newPerson = { name: newName, number: newPhone };
+    personsService.create(newPerson).then(returnPerson => {
+      setPersons(persons.concat(returnPerson));
+      setNewName("");
+      setNewPhone("");
+    });
   };
 
   return (

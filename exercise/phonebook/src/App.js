@@ -3,19 +3,22 @@ import { useEffect, useState } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import PersonList from "./components/PersonList";
+import personsService from "./services/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [searchFilter, setSearchFilter] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:3001/db").then(response => {
-      setPersons(response.data.persons);
-    });
+    const fetchData = async () => {
+      const data = await personsService.getAll();
+      setPersons(data);
+    };
+    fetchData();
   }, []);
 
-  const filteredPersons = persons.filter(person =>
-    person.name.toLowerCase().includes(searchFilter.toLowerCase())
+  const filteredPersons = persons.filter(({ name }) =>
+    name.toLowerCase().includes(searchFilter.toLowerCase())
   );
 
   return (
@@ -25,7 +28,11 @@ const App = () => {
       <h2>Add a person</h2>
       <PersonForm persons={persons} setPersons={setPersons} />
       <h2>Numbers</h2>
-      <PersonList filteredPersons={filteredPersons} />
+      <PersonList
+        filteredPersons={filteredPersons}
+        persons={persons}
+        setPersons={setPersons}
+      />
     </div>
   );
 };
