@@ -13,7 +13,7 @@ const PersonForm = props => {
       return;
     }
     const temp = [...props.persons];
-    const x = { name: newName, phone: newPhone };
+    const x = { name: newName, number: newPhone };
     temp.push(x);
     props.setPersons(temp);
     setNewName("");

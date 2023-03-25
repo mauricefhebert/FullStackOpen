@@ -6,7 +6,7 @@ const PersonList = props => {
       {props.filteredPersons.map(person => (
         <div key={person.id}>
           <p>Name: {person.name}</p>
-          <p>Phone: {person.phone}</p>
+          <p>Phone: {person.number}</p>
         </div>
       ))}
     </>
